@@ -1,0 +1,10 @@
+{
+    "name": "moviematch-api",
+    "version": "1.0.0",
+    "description": "A website to receive movie recommendations based on ratings.",
+    "main": "src/server.js",
+    "repository": "https://github.com/lukedoolittle/moviematch",
+    "license": "MIT",
+    "dependencies": {
+    }
+}

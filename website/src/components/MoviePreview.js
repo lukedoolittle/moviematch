@@ -12,20 +12,16 @@ export default class MoviePreview extends React.Component {
       };
   }
 
-  onStarClick(nextValue, prevValue, name) {
-      this.setState({rating: nextValue});
-  }
   render() {
     const { rating } = this.state;
     return (
         <div className="movie-preview">
-          <img src={`img/${this.props.image}`}/>
-          <h2 className="name">{this.props.name}</h2>
+          <img src={`img/${this.props.data.image}`}/>
           <StarRatingComponent 
-                    name="rate1" 
+                    name={this.props.data.id}
                     starCount={5}
                     value={rating}
-                    onStarClick={this.onStarClick.bind(this)}
+                    onStarClick={this.props.onStarClick.bind(this)}
                 />
         </div>
     );
