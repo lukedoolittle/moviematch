@@ -348,6 +348,7 @@ typings/
 
 # babel
 babel_cache/
+bundle.js
 
 # osx
 .DS_Store
