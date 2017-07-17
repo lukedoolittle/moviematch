@@ -20,7 +20,7 @@
 
 * Start the Hive metastore and load all of the data
 
-      ./data/start_metastore.sh
+      /data/start_metastore.sh
       cd moviematch/data
       ./initial_data_load.sh
 	  
