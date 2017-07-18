@@ -29,6 +29,10 @@ module.exports = {
         cacheDirectory: 'babel_cache',
         presets: debug ? ['react', 'es2015', 'react-hmre'] : ['react', 'es2015']
       }
+    },
+    {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        loader: 'file?name=public/fonts/[name].[ext]'
     }]
   },
   plugins: debug ? [] : [

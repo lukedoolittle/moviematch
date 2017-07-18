@@ -8,10 +8,23 @@ input::-ms-clear{display:none}input[type=number]{-moz-appearance:textfield}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{appearance:none}
 svg{display:inline-flex}img{max-width:100%;display:block}
 
+@font-face{
+    font-family: "The-Movies";
+    src: url('/font/see_you_at_the_movies.eot') format('opentype');
+    src: url('/font/see_you_at_the_movieseot?#iefix') format('embedded-opentype'),
+         url('/font/see_you_at_the_movies.woff2') format('woff2'),
+         url('/font/See-You-At-The-Movies.woff') format('woff'),
+         url('/font/see_you_at_the_movies.ttf') format('truetype'),
+         url('/font/See_You_At_The_Movies.svg#See_You_At_The_Movies') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html {
   color: #030303;
   font: caption;
   padding-bottom: 2em;
+  background-color: black;
 }
 
 a {
@@ -20,7 +33,12 @@ a {
 }
 
 header {
-  padding: 2em;
+  padding-left: 1em;
+  padding-top: 40px;
+  padding-bottom: 0px;
+  font-family: The-Movies;
+  font-size: 140px;
+  color: white;
 }
 
 header .logo {
@@ -63,27 +81,37 @@ footer p {
 
 .home .movies-selector {
   clear: both;
-  padding: 2em;
   text-align: center;
+  color: white;
+  font-family: The-Movies;
 }
 
-.home .movies-selector .movie-preview {
-  border: 1px solid #ccc;
+.home .movies-selector .category-header {
+  font-family: The-Movies;
+  border-bottom:1px solid #fff;
+  font-size: 70px;
+  width: 60%;
+  text-align: right;
+  margin: auto;
+}
+
+.home .movies-selector .movie-rating {
+  border: 0px solid #ccc;
   box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   display: inline-block;
-  margin: 0 1em 1em 0;
-  max-width: 200px;
+  margin: 20px 1em 1em 0;
+  max-width: 150px;
   padding: 0;
   position: relative;
   width: 100%;
 }
 
-.home .movies-selector .movie-preview img {
+.home .movies-selector .movie-rating img {
   margin: 0;
   width: 100%;
 }
 
-.home .movies-selector .movie-preview .name {
+.home .movies-selector .movie-rating .name {
   color: #030303;
   display: inline-block;
   font-size: 1.6em;
@@ -96,18 +124,22 @@ footer p {
   width: 100%;
 }
 
-.home .movies-selector .movie-preview .medals-count {
-  background: #fff;
-  border-radius: 2px;
+.home .movies-selector .movie-reco {
+  border: 0px solid #ccc;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   display: inline-block;
-  font-weight: bold;
-  margin: .2em;
-  padding: .2em .4em;
-  position: absolute;
-  right: 0;
-  text-align: center;
-  top: 0;
-  vertical-align: middle;
+  margin: 20px 1em 1em 0;
+  max-width: 100px;
+  padding: 0;
+  position: relative;
+  width: 100%;
+  color: white;
+  font-size: 50px;
+}
+
+.home .movies-selector .movie-reco img {
+  margin: 0;
+  width: 100%;
 }
 
 nav.movies-menu {

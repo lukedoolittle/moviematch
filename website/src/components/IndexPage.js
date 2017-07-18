@@ -1,9 +1,9 @@
 'use strict';
 
 import React from 'react';
-import MoviePreview from './MoviePreview';
+import MovieRating from './MovieRating';
+import MovieReco from './MovieReco';
 import movies from '../data/movies';
-
 
 export default class IndexPage extends React.Component {
   constructor() {
@@ -11,8 +11,7 @@ export default class IndexPage extends React.Component {
 
       this.state = {
         ratings:{someMovie:1},
-        recommendations:{}
-        //,gotSomeRecommendations: 'No'
+        recommendations:[{movie_id:1, rating: 10}, {movie_id:2, rating:0}]
       };
 
       this.onStarClick = this.onStarClick.bind(this);
@@ -20,7 +19,7 @@ export default class IndexPage extends React.Component {
   }
 
   onRecosReceived(recommendations){
-    this.setState({recommendations: recommendations});
+    this.setState({ratings: this.state.ratings, recommendations: recommendations});
     //console.log('I was triggered during fetch callback')
     //this.setState({gotSomeRecommendations: 'yes'})
   }
@@ -29,18 +28,22 @@ export default class IndexPage extends React.Component {
     this.state.ratings[name] = nextValue
     this.forceUpdate();
     if(Object.keys(this.state.ratings).length > 2) {
-      //this.setState({gotSomeRecommendations: 'waiting...'})
-      fetch('/api').then(this.onRecosReceived);
+      //fetch('/api').then(this.onRecosReceived);
+      this.onRecosReceived([{movie_id: 1, rating: 97}, {movie_id: 2, rating: 80}, {movie_id: 3, rating: 99}, {movie_id: 4, rating: 40}, {movie_id: 5, rating: 2}])
     }
   }
 
   render() {
-    const {gotSomeRecommendations} = this.state;
+    const {recommendations} = this.state;
     return (
       <div className="home">
         <div className="movies-selector">
-          {movies.map(movieData => <MoviePreview key={movieData.id} {...{data: movieData, onStarClick: this.onStarClick} } />)}
-          {/*<h2>Got some recos: {gotSomeRecommendations}</h2>*/}
+          <div className="category-header">ratings</div>
+          {movies.map(movieData => <MovieRating key={movieData.id} {...{data: movieData, onStarClick: this.onStarClick} } />)}
+        </div>
+        <div className="movies-selector">
+          <div className="category-header">recommendations</div>
+          {recommendations.map(recoData => <MovieReco key={recoData.movie_id} {...recoData } />)}
         </div>
       </div>
     );
