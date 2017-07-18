@@ -19,26 +19,6 @@ app.set('views', path.join(__dirname, 'views'));
 // define the folder that will be used for static assets
 app.use(Express.static(path.join(__dirname, 'static')));
 
-// if we want to deal with post requests should
-// include requestjs
-
-
-// proxy requests to the api
-app.get('/api/*', (req, res) => {
-  if(process.env.NODE_ENV==='stage'){
-    res.send({10:3.5, 12:4, 13:1})
-  }
-  var connector = Http.request({
-    host: 'localhost',
-    port: 8081,
-    method: req.method,
-    path: req.path,
-    }, function(resp) {
-      resp.pipe(res, {end:true});
-  });
-  req.pipe(connector, {end:true});
-});
-
 // universal routing and rendering
 app.get('*', (req, res) => {
   match(

@@ -10,10 +10,15 @@ module.exports = {
   entry: path.join(__dirname, 'src', 'app-client.js'),
   devServer: {
     inline: true,
-    port: 8081,
+    port: 8080,
     contentBase: "src/static/",
     historyApiFallback: {
       index: '/index-static.html'
+    },
+    proxy: {
+      '/api/*': {
+        target: 'http://localhost:8081'
+      }
     }
   },
   output: {
@@ -31,8 +36,8 @@ module.exports = {
       }
     },
     {
-        test: /\.(eot|svg|ttf|woff|woff2)$/,
-        loader: 'file?name=public/fonts/[name].[ext]'
+      test: /\.(eot|svg|ttf|woff|woff2)$/,
+      loader: 'file?name=public/fonts/[name].[ext]'
     }]
   },
   plugins: debug ? [] : [
