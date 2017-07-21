@@ -352,3 +352,7 @@ bundle.js
 
 # osx
 .DS_Store
+
+# spark
+metastore_db/
+spark-warehouse/

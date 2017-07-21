@@ -21,7 +21,7 @@ sqlContext = HiveContext(sc)
 
 # combine the given user ratings with the ratings in the database
 user_ratings = sc.parallelize(given_ratings)
-ratings = sqlContext.sql('select * from movie_ratings').map(lambda l: (l.user_id, l.movie_id, l.rating))
+ratings = sqlContext.sql('select * from movie_ratings').rdd.map(lambda l: (l.user_id, l.movie_id, l.rating))
 complete_ratings = ratings.union(user_ratings)
 
 # train the model on ALL ratings
