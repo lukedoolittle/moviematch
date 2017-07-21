@@ -2,7 +2,8 @@
 
 ### Create EC2 Instance
 
-* Launch the vanilla UCB AMI `ami-be0d5fd4` from AWS ([shortcut to east-1](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-be0d5fd4))
+* Launch the vanilla UCB AMI `ami-be0d5fd4` from AWS ([shortcut to east-1](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-be0d5fd4)). **Note** you must attach additional storage in the form of an EBS with at least 10 GB of space.
+
 * Update the instance and reboot
 
       sudo yum install epel-release && sudo yum update -y && sudo reboot

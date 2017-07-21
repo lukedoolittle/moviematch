@@ -350,6 +350,9 @@ typings/
 babel_cache/
 bundle.js
 
+# project
+package-lock.json
+
 # osx
 .DS_Store
 
