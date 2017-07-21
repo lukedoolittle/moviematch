@@ -25,15 +25,14 @@
       cd moviematch/data
       ./initial_data_load.sh
 	  
-* Build and run server
+* Build and run webserver
 
-      cd moviematch/website/moviematch/
+      cd moviematch/webserver
       npm i
       npm run start
-	  
-### Validate Instance
 
-* Test the Node installation
+* Build and run apiserver
 
-      node moviematch/test/simpleServer.js
-      curl http://localhost:8080/
+      cd moviematch/apiserver
+      npm i
+      node src/server.js

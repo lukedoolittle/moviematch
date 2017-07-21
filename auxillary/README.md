@@ -1,10 +1,9 @@
-# Data Loading
+### Validate Instance
 
-### Load Initial Data
+* Test the Node installation
 
-      ./initial_data_load.sh
-
-### Validate
+      node moviematch/test/simpleServer.js
+      curl http://localhost:8080/
 
 * Test that there are some movies in the database and they have ratings
 
