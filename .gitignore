@@ -359,3 +359,6 @@ package-lock.json
 # spark
 metastore_db/
 spark-warehouse/
+
+# visual studio code
+.vscode/

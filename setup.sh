@@ -4,16 +4,19 @@ mkdir data
 chmod a+rwx /data
 
 # run the UCB setup script which installs Hadoop, Postgres, and Hive
+echo 'running: UCB complete setup script'
 wget https://s3.amazonaws.com/ucbdatasciencew205/setup_ucb_complete_plus_postgres.sh
 chmod +x ./setup_ucb_complete_plus_postgres.sh
 ./setup_ucb_complete_plus_postgres.sh /dev/xvdb
 
 # run the UCB spark setup script which installs and configures Spark
+echo 'running: UCB spark setup script'
 wget https://s3.amazonaws.com/ucbdatasciencew205/setup_spark.sh
 bash ./setup_spark.sh
 
 # add pyspark, spark-sql to path for w205 and root
 # and change the pyspark interpreter to use python 2.6
+echo 'configuration: adding environmental variables for spark'
 echo 'export SPARK=/data/spark15' >>/home/w205/.bash_profile
 echo 'export SPARK=/data/spark15' >>.bash_profile
 echo 'export SPARK_HOME=$SPARK' >>/home/w205/.bash_profile
@@ -30,14 +33,32 @@ export PATH=$SPARK/bin:$PATH
 export PYSPARK_PYTHON=python2.6
 
 # supress logging output from spark-submit jobs
+echo 'configuration: reducing logging for spark'
 cp /data/spark15/conf/log4j.properties.template /data/spark15/conf/log4j.properties
 sed -i '2s/.*/log4j.rootCategory=ERROR, console/' /data/spark15/conf/log4j.properties
 
 # clean up the setup scripts
+echo 'clean: removing UCB setup scripts'
 rm setup_ucb_complete_plus_postgres.sh
 rm setup_spark.sh
 
 # download the installer and install
+echo 'installing: nodejs'
 yum install -y gcc-c++ make
 curl -sL https://rpm.nodesource.com/setup_8.x | bash -
 yum install -y nodejs
+
+# install mongodb
+echo 'installing: mongodb'
+cat > /etc/yum.repos.d/mongodb-org-3.4.repo <<EOF
+[mongodb-org-3.4]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.4/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
+EOF
+yum install -y mongodb-org
+
+#install mongodb python interface
+pip install pymongo

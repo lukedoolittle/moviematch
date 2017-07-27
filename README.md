@@ -4,7 +4,7 @@
 
 * Launch the vanilla UCB AMI `ami-be0d5fd4` from AWS ([shortcut to east-1](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-be0d5fd4)). **Note** you must attach additional storage in the form of an EBS with at least 10 GB of space.
 
-* Update the instance and reboot
+* (optional) Update the instance and reboot
 
       sudo yum install epel-release && sudo yum update -y && sudo reboot
 	  
@@ -19,9 +19,10 @@
       su - w205
       git clone https://github.com/lukedoolittle/moviematch.git
 
-* Start the Hive metastore and load all of the data
+* Start the Hive metastore and Mongodb, and load all of the data
 
       /data/start_metastore.sh
+      service mongod start
       cd moviematch/data
       ./initial_data_load.sh
 	  
