@@ -9,7 +9,9 @@ const hostname = 'localhost';
 app.use(bodyParser.json());
 
 app.post('/api/predict', function (req, res) {
-  const command = 'spark-submit ../ml/predict.py "' + JSON.stringify(req.body).replace(/\x22/g, '\\\x22') + '"';
+  const command = 'spark-submit ../ml/predict.py "' 
+    + JSON.stringify(req.body).replace(/\x22/g, '\\\x22') 
+    + '"';
   console.log('got api/predict request');
   exec(command, (err, stdout, stderr) => {
     if (err) {

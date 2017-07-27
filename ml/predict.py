@@ -1,9 +1,9 @@
-from pyspark import SparkConf, SparkContext
-from pyspark import HiveContext
-from pyspark.mllib.recommendation import ALS, MatrixFactorizationModel, Rating
 import json
 import sys
 import decimal
+from pyspark import SparkConf, SparkContext
+from pyspark import HiveContext
+from pyspark.mllib.recommendation import ALS, MatrixFactorizationModel, Rating
 
 if len(sys.argv) != 2:
     print('Actual argument count is {0}'.format(len(sys.argv)))
