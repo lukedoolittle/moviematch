@@ -1,9 +1,9 @@
 import os
 import json
-from pymongo import MongoClient
+import pymongo
 
 def load_movies():
-    collection = MongoClient().moviematch.movies
+    collection = pymongo.MongoClient().moviematch.movies
     movies = []
 
     os.chdir('movies')
@@ -16,8 +16,12 @@ def load_movies():
         movie['movielens_id'] = filename.split('.')[0]
         movies.append(movie)
 
-    # insert all the json objects into the database
+    # insert all the json objects into the database and create an
+    # index on the movielens id
     collection.insert_many(movies)
+    collection.create_index([('movielens_id', pymongo.TEXT)],
+                            name='search_index',
+                            default_language='english')
     print('added {0} movies to the database'.format(len(movies)))
 
 load_movies()

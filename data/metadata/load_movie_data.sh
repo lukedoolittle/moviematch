@@ -12,4 +12,4 @@ python load_movie_data.py
 # clean up the files left behind
 echo 'cleaning: movie data'
 rm -r movies
-rm movies.tar.gz
+rm -r movies.tar.gz
