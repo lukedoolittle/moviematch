@@ -106,6 +106,10 @@ footer p {
   width: 100%;
 }
 
+.home .movies-selector .movie-rating .movie-rating-tooltip {
+  font-size: 50px !important;
+}
+
 .home .movies-selector .movie-rating img {
   margin: 0;
   width: 100%;
@@ -135,6 +139,10 @@ footer p {
   width: 100%;
   color: white;
   font-size: 50px;
+}
+
+.home .movies-selector .movie-reco .movie-reco-tooltip {
+  font-size: 50px !important;
 }
 
 .home .movies-selector .movie-reco img {

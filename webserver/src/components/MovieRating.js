@@ -2,6 +2,7 @@
 
 import React from 'react';
 import StarRatingComponent from 'react-star-rating-component';
+import ReactTooltip from 'react-tooltip'
 
 export default class MovieRating extends React.Component {
   constructor() {
@@ -15,8 +16,11 @@ export default class MovieRating extends React.Component {
   render() {
     const { rating } = this.state;
     return (
-        <div className="movie-rating"  style={{fontSize: 30}}>
-          <img src={`http://image.tmdb.org/t/p/w185/${this.props.data.path}`}/>
+        <div className="movie-rating" style={{fontSize: 30}}>
+          <p data-class='movie-rating-tooltip' data-tip={`${this.props.data.title}`}>
+              <img src={`http://image.tmdb.org/t/p/w185/${this.props.data.path}`}/>
+          </p>
+          <ReactTooltip />
           <StarRatingComponent 
                     name={this.props.data.movie_id}
                     starCount={5}

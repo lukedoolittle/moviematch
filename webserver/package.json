@@ -7,7 +7,7 @@
     "proxy": {
         "/api/*": {
             "target": "http://localhost:8081"
-            }
+        }
     },
     "scripts": {
         "start": "cross-env NODE_ENV=production node_modules/.bin/babel-node --presets react,es2015 src/server.js",
@@ -33,6 +33,7 @@
         "react-dom": "^15.3.1",
         "react-router": "^2.6.1",
         "react-star-rating-component": "^1.2.4",
+        "react-tooltip": "^3.3.0",
         "request": "^2.81.0"
     },
     "devDependencies": {

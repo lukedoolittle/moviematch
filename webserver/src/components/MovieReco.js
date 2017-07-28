@@ -1,12 +1,16 @@
 'use strict';
 
 import React from 'react';
+import ReactTooltip from 'react-tooltip'
 
 export default class MovieReco extends React.Component {
   render() {
     return (
         <div className="movie-reco">
-          <img src={`http://image.tmdb.org/t/p/w185//${this.props.path}`}/>
+          <p data-class='movie-reco-tooltip' data-tip={`${this.props.title}`}>
+              <img src={`http://image.tmdb.org/t/p/w185/${this.props.path}`}/>
+          </p>
+          <ReactTooltip />
           {this.props.rating}% match
         </div>
     );
