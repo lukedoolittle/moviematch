@@ -3,6 +3,8 @@
 import React from 'react';
 import MovieRating from './MovieRating';
 import MovieReco from './MovieReco';
+import TransitionGroup from 'react-transition-group/TransitionGroup';
+import CSSTransition from 'react-transition-group/CSSTransition';
 
 export default class IndexPage extends React.Component {
   constructor() {
@@ -56,12 +58,21 @@ export default class IndexPage extends React.Component {
 
   render() {
     const {recommendations} = this.state;
-    const {movies} = this.state;
+    const items = this.state.movies.map(movieData => 
+      <CSSTransition
+          key={movieData.movie_id}
+          classNames="example"
+          timeout={{ enter: 500, exit: 300 }}>
+        <MovieRating key={movieData.movie_id} {...{data: movieData, onStarClick: this.onStarClick} }/>
+      </CSSTransition>
+    );
     return (
       <div className="home">
         <div className="movies-selector">
           <div className="category-header">ratings</div>
-          {movies.map(movieData => <MovieRating key={movieData.movie_id} {...{data: movieData, onStarClick: this.onStarClick} } />)}
+          <TransitionGroup>
+            {items}
+          </TransitionGroup>
         </div>
         <div className="movies-selector">
           <div className="category-header">recommendations</div>

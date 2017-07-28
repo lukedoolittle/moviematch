@@ -97,7 +97,6 @@ footer p {
 
 .home .movies-selector .movie-rating {
   border: 0px solid #ccc;
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   display: inline-block;
   margin: 20px 1em 1em 0;
   max-width: 150px;
@@ -284,3 +283,21 @@ nav.movies-menu a.active {
 #abar a:hover {
   text-decoration: underline;
 }
+
+ .example-enter {
+   opacity: 0.01;
+ }
+
+ .example-enter.example-enter-active {
+   opacity: 1;
+   transition: opacity 500ms ease-in;
+ }
+
+.example-exit {
+   opacity: 1;
+ }
+
+ .example-exit.example-exit-active {
+   opacity: 0.01;
+   transition: opacity 300ms ease-in;
+ }
