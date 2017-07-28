@@ -16,9 +16,9 @@ export default class MovieRating extends React.Component {
     const { rating } = this.state;
     return (
         <div className="movie-rating"  style={{fontSize: 30}}>
-          <img src={`img/${this.props.data.image}`}/>
+          <img src={`http://image.tmdb.org/t/p/w185/${this.props.data.path}`}/>
           <StarRatingComponent 
-                    name={this.props.data.id}
+                    name={this.props.data.movie_id}
                     starCount={5}
                     value={rating}
                     starColor="#ffffff"

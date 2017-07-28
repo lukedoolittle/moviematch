@@ -1,6 +1,7 @@
 ﻿const bodyParser = require('body-parser');
 const { exec } = require('child_process');
 const express = require('express');
+const _ = require('underscore')
 var client = require('mongodb').MongoClient;
 const app = express();
 
@@ -8,62 +9,90 @@ const port = process.env.port || 8081;
 const hostname = 'localhost';
 const mongoUrl = "mongodb://localhost:27017/moviematch";
 
-app.use(bodyParser.json());
-
-app.post('/api/predict', function (req, res) {
-  const command = 'spark-submit ../ml/predict.py "' 
-    + JSON.stringify(req.body).replace(/\x22/g, '\\\x22') 
-    + '"';
-  console.log('got api/predict request');
-  exec(command, (err, stdout, stderr) => {
-    if (err) {
-      console.log('error processing spark request');
-      console.log(`stdout: ${stdout}`);
-      return;
-    }
-    res.send(stdout)
-  });
-});
-
-app.get('/api/movies/ids/:ids', function (req, res) {
-  console.log('got api/movies/ids request');
+var mongo_get_multiple = function(ids, callback) {
   client.connect(mongoUrl, function(err, db) {
     if (err) {
       console.log('error connecting to database');
       throw err;
     }
     query = { $or:[] };
-    for (const x of req.params['ids'].split(',')) {
-      query.$or.push({movielens_id: x});
+    for (const x of ids) {
+      query.$or.push({ movielens_id: x });
     }
-
     db.collection('movies').find(query).toArray(function(err, result) {
       if (err) {
         console.log('error processing query results');
         throw err;
       }
-      res.send(result);
-      db.close();
+      callback(result);
     });
+  });
+}
+
+app.use(bodyParser.json());
+
+app.post('/api/predict', function (req, res) {
+  const payload = JSON.stringify(req.body).replace(/\x22/g, '\\\x22')
+  const command = 'spark-submit ../ml/predict.py "' + payload + '"';
+  console.log('request: ' + req.path);
+  exec(command, (err, stdout, stderr) => {
+    if (err) {
+      console.log(`error: ${stdout}`);
+      return;
+    }
+    result = JSON.parse(stdout);
+    maximum_rating = result[0].rating;
+    mongo_get_multiple(result.map(function(a) { return a.movie_id.toString() }), 
+                       function(data) {
+                         mergedData = data.map(function(a) {
+                           return {
+                             movie_id: a.movielens_id,
+                             path: a.poster_path,
+                             title: a.title,
+                             rating: Math.round(_.where(result, 
+                                                        {movie_id: parseInt(a.movielens_id)})[0]
+                                                 .rating/maximum_rating*100)
+                           }
+                         });
+                         res.send(mergedData);
+                       });
   });
 });
 
+app.get('/api/movies/ids/:ids', function (req, res) {
+  console.log('request: ' + req.path);
+  mongo_get_multiple(req.params['ids'].split(','), 
+                     res.send);
+});
+
 app.get('/api/movies/random/:count', function (req, res) {
-  console.log('got api/movies/random request')
+  console.log('request: ' + req.path);
   client.connect(mongoUrl, function(err, db) {
     if (err) {
       console.log('error connecting to database')
       throw err;
     }
-    //console.log('connected to database')
+
     size = parseInt(req.params['count'])
-    db.collection('movies').aggregate([{ $sample: { size: size } }]).toArray(function(err, result) {
+    //take 100 times the requested number, sort by vote_count to get the most popular
+    //and then return only the requested number
+    db.collection('movies').aggregate([{ $sample: { size: size*100 } }]).toArray(function(err, result) {
       if (err) {
         console.log('error processing query results')
         throw err;
       }
-      //console.log('query complete');
-      res.send(result)
+
+      result.sort(function(a, b) {
+        return parseInt(b.vote_count) - parseInt(a.vote_count);
+      });
+      res.send(result.slice(0, size).map(function(a) {
+                           return {
+                             movie_id: a.movielens_id,
+                             path: a.poster_path,
+                             title: a.title
+                           }
+                         })
+      );
       db.close();
     });
   });
