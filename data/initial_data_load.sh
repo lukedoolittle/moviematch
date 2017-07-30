@@ -15,6 +15,12 @@ cd movielens
 ./load_movielens_data.sh
 cd ..
 
+# load the netflix prize dataset into hdfs
+echo 'running: netflix prize load script'
+cd np
+./load_np_data.sh
+cd ..
+
 # create the tables in spark
 echo 'creating: ratings table in spark'
 spark-sql -f create_tables.sql
