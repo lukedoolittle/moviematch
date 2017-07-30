@@ -4,10 +4,11 @@ mkdir data
 chmod a+rwx /data
 
 # run the UCB setup script which installs Hadoop, Postgres, and Hive
+read -p 'Please enter the location of your attached volume: /dev/' locationvar
 echo 'running: UCB complete setup script'
 wget https://s3.amazonaws.com/ucbdatasciencew205/setup_ucb_complete_plus_postgres.sh
 chmod +x ./setup_ucb_complete_plus_postgres.sh
-./setup_ucb_complete_plus_postgres.sh /dev/xvdb
+./setup_ucb_complete_plus_postgres.sh /dev/$locationvar
 
 # run the UCB spark setup script which installs and configures Spark
 echo 'running: UCB spark setup script'
