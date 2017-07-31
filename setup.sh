@@ -4,7 +4,8 @@ mkdir data
 chmod a+rwx /data
 
 # run the UCB setup script which installs Hadoop, Postgres, and Hive
-read -p 'Please enter the location of your attached volume: /dev/' locationvar
+read -p 'Please enter the location of your attached volume [default is xvdb]: /dev/' locationvar
+locationvar=${locationvar:-xvdb}
 echo 'running: UCB complete setup script'
 wget https://s3.amazonaws.com/ucbdatasciencew205/setup_ucb_complete_plus_postgres.sh
 chmod +x ./setup_ucb_complete_plus_postgres.sh
@@ -61,5 +62,8 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 EOF
 yum install -y mongodb-org
 
-#install mongodb python interface
+# install mongodb python interface
 pip install pymongo
+
+# forward HTTP traffic to port 8080
+iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8080
