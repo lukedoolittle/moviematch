@@ -4,6 +4,8 @@ import React from 'react';
 import MovieRating from './MovieRating';
 import MovieReco from './MovieReco';
 import Loadable from 'react-loading-overlay'
+import TransitionGroup from 'react-transition-group/TransitionGroup';
+import CSSTransition from 'react-transition-group/CSSTransition';
 
 export default class IndexPage extends React.Component {
   constructor() {
@@ -38,6 +40,7 @@ export default class IndexPage extends React.Component {
 
   onStarClick(nextValue, prevValue, name) {
     this.state.ratings.push({movie_id: name, rating: nextValue})
+    this.state.movies.splice(this.state.movies.findIndex(i => i.movie_id === name), 1);
     this.setState({movies: this.state.movies,
                    ratings: this.state.ratings, 
                    recommendations: this.state.recommendations,
@@ -63,8 +66,14 @@ export default class IndexPage extends React.Component {
 
   render() {
     const {recommendations} = this.state;
-    const items = this.state.movies.map(movieData => 
-        <MovieRating key={movieData.movie_id} {...{data: movieData, onStarClick: this.onStarClick} }/>
+    const movies = this.state.movies.map(movieData => 
+        <CSSTransition 
+          key={movieData.movie_id} 
+          classNames="movie" 
+          timeout={{ enter: 500, exit: 300 }}> 
+        <MovieRating key={movieData.movie_id} {...{data: movieData, 
+                                                   onStarClick: this.onStarClick} }/>
+        </CSSTransition>
     );
     return (
       <div className="home">
@@ -76,7 +85,9 @@ export default class IndexPage extends React.Component {
               spinner={true}
               animate={true}
               text='Generating recommendations...'>
-              {items}
+              <TransitionGroup> 
+                {movies}
+              </TransitionGroup>
             </Loadable>
           </div>
         </div>

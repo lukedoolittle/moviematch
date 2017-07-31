@@ -301,7 +301,7 @@ nav.movies-menu a.active {
    opacity: 1;
  }
 
-.movie.movie-exit-active {
+.movie-exit.movie-exit-active {
    opacity: 0.01;
    transition: opacity 300ms ease-in;
  }
