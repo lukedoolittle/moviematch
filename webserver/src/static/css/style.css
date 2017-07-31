@@ -95,7 +95,11 @@ footer p {
   margin: auto;
 }
 
-.home .movies-selector .movie-rating {
+.home .movies-selector .movies-ratings{
+  font-size: 2.5em;
+}
+
+.home .movies-selector .movies-ratings .movie-rating {
   border: 0px solid #ccc;
   display: inline-block;
   margin: 20px 1em 1em 0;
@@ -105,16 +109,16 @@ footer p {
   width: 100%;
 }
 
-.home .movies-selector .movie-rating .movie-rating-tooltip {
+.home .movies-selector .movies-ratings .movie-rating .movie-rating-tooltip {
   font-size: 50px !important;
 }
 
-.home .movies-selector .movie-rating img {
+.home .movies-selector .movies-ratings .movie-rating img {
   margin: 0;
   width: 100%;
 }
 
-.home .movies-selector .movie-rating .name {
+.home .movies-selector .movies-ratings .movie-rating .name {
   color: #030303;
   display: inline-block;
   font-size: 1.6em;
@@ -284,20 +288,20 @@ nav.movies-menu a.active {
   text-decoration: underline;
 }
 
- .example-enter {
+.movie-enter {
    opacity: 0.01;
  }
 
- .example-enter.example-enter-active {
+.movie-enter.movie-enter-active {
    opacity: 1;
    transition: opacity 500ms ease-in;
  }
 
-.example-exit {
+.movie-exit {
    opacity: 1;
  }
 
- .example-exit.example-exit-active {
+.movie.movie-exit-active {
    opacity: 0.01;
    transition: opacity 300ms ease-in;
  }
