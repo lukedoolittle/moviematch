@@ -22,7 +22,7 @@ export default class IndexPage extends React.Component {
   }
 
   componentDidMount() {
-    fetch('/api/movies/random/5')
+    fetch('/api/movies/random/10')
       .then(response => { return response.json(); })
       .then(result => {
         this.setState({movies: result,
@@ -75,11 +75,11 @@ export default class IndexPage extends React.Component {
 
   render() {
     const {recommendations} = this.state;
-    const movies = this.state.movies.map(movieData => 
+    const movies = this.state.movies.slice(0,5).map(movieData => 
         <CSSTransition 
           key={movieData.movie_id} 
           classNames="movie" 
-          timeout={{ enter: 500, exit: 300 }}> 
+          timeout={{ enter: 300, exit: 300 }}> 
         <MovieRating key={movieData.movie_id}
                      data={movieData}
                      onStarClick={this.onStarClick}
