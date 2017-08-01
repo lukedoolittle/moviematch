@@ -18,6 +18,7 @@ export default class IndexPage extends React.Component {
     };
     this.onStarClick = this.onStarClick.bind(this);
     this.onRecosReceived = this.onRecosReceived.bind(this);
+    this.onSkipClick = this.onSkipClick.bind(this);
   }
 
   componentDidMount() {
@@ -36,6 +37,14 @@ export default class IndexPage extends React.Component {
                    ratings: this.state.ratings, 
                    recommendations: recommendations,
                    loading: false});
+  }
+
+  onSkipClick(name) {
+    this.state.movies.splice(this.state.movies.findIndex(i => i.movie_id === name), 1);
+    this.setState({movies: this.state.movies,
+                   ratings: this.state.ratings, 
+                   recommendations: this.state.recommendations,
+                   loading: this.state.loading});
   }
 
   onStarClick(nextValue, prevValue, name) {
@@ -71,8 +80,10 @@ export default class IndexPage extends React.Component {
           key={movieData.movie_id} 
           classNames="movie" 
           timeout={{ enter: 500, exit: 300 }}> 
-        <MovieRating key={movieData.movie_id} {...{data: movieData, 
-                                                   onStarClick: this.onStarClick} }/>
+        <MovieRating key={movieData.movie_id}
+                     data={movieData}
+                     onStarClick={this.onStarClick}
+                     onSkipClick={this.onSkipClick}/>
         </CSSTransition>
     );
     return (

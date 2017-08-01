@@ -3,6 +3,7 @@
 import React from 'react';
 import StarRatingComponent from 'react-star-rating-component';
 import ReactTooltip from 'react-tooltip'
+import ClickButton from './ClickButton'
 
 export default class MovieRating extends React.Component {
   constructor() {
@@ -26,8 +27,11 @@ export default class MovieRating extends React.Component {
                     starCount={5}
                     value={rating}
                     starColor="#ffffff"
-                    onStarClick={this.props.onStarClick.bind(this)}
-                />
+                    onStarClick={this.props.onStarClick.bind(this)}/>
+          <ClickButton
+                    text='skip'
+                    onClick={this.props.onSkipClick}
+                    value={this.props.data.movie_id}/>
         </div>
     );
   }
