@@ -9,7 +9,7 @@ cd np
 hive -f create_schema.sql
 
 echo 'running: netflix prize load script'
-./load_np_data.sh
+./quick_load_np_data.sh
 
 echo 'creating: ratings table in spark'
 spark-sql -f create_tables.sql

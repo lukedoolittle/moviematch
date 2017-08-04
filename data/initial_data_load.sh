@@ -9,7 +9,7 @@ cd movielens
 hive -f create_schema.sql
 
 echo 'running: movielens load script'
-./load_movielens_data.sh
+./quick_load_movielens_data.sh
 
 echo 'creating: ratings table in spark'
 spark-sql -f create_tables.sql
@@ -17,5 +17,5 @@ cd ..
 
 echo 'running: movie metadata load script'
 cd metadata
-./load_movie_data.sh
+./load_movie_metadata.sh
 cd ..
