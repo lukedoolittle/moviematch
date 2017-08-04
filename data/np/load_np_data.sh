@@ -1,4 +1,5 @@
 # Download the dataset
+echo 'downloading: netflix dataset'
 wget --directory-prefix /data/ https://s3.amazonaws.com/moviematchbeta/nf_prize_dataset.tar.gz
 
 # Unzip and tar the dataset
@@ -27,4 +28,20 @@ rm /data/npdata/movie_titles.txt
 
 # Load the csv files into hdfs
 echo 'loading netflix prize csv files into hdfs'
-bash /home/w205/moviematch/data/np/load_data_lake.sh
+
+hdfs dfs -put /data/npdata/ratings/ratings.csv /user/w205/moviematch/netflix_ratings
+echo "Training data loaded into HDFS."
+hdfs dfs -put /data/npdata/titles/titles.csv /user/w205/moviematch/netflix_titles
+echo "Movie titles loaded into HDFS."
+
+wget --directory-prefix /data/npdata/ https://s3.amazonaws.com/moviematch/movie_ids.csv
+echo 'moving: movie_id mapping into hdfs'
+hdfs dfs -put /data/npdata/movie_ids.csv /user/w205/moviematch/movie_id_map
+
+# Remove the storage-heavy files that were just put into hdfs
+echo 'cleaning: netflix prize dataset'
+rm -r /data/npdata
+
+
+
+

@@ -4,6 +4,10 @@ import json
 import time
 import os
 
+# requirements:
+# -add an API key
+# -create a directory called /data
+
 conn = http.client.HTTPSConnection("api.themoviedb.org")
 api_key = '<YOUR THEMOVIEDB API KEY HERE>'
 
