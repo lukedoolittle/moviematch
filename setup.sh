@@ -11,7 +11,6 @@ wget https://s3.amazonaws.com/ucbdatasciencew205/setup_ucb_complete_plus_postgre
 chmod +x ./setup_ucb_complete_plus_postgres.sh
 ./setup_ucb_complete_plus_postgres.sh /dev/$locationvar
 
-# run the UCB spark setup script which installs and configures Spark
 echo 'running: UCB spark setup script'
 wget https://s3.amazonaws.com/ucbdatasciencew205/setup_spark.sh
 bash ./setup_spark.sh
@@ -34,23 +33,25 @@ export SPARK_HOME=$SPARK
 export PATH=$SPARK/bin:$PATH
 export PYSPARK_PYTHON=python2.6
 
-# supress logging output from spark-submit jobs
 echo 'configuration: reducing logging for spark'
 cp /data/spark15/conf/log4j.properties.template /data/spark15/conf/log4j.properties
 sed -i '2s/.*/log4j.rootCategory=ERROR, console/' /data/spark15/conf/log4j.properties
+
+echo 'configuration: expanding memory for spark'
+cp /data/spark15/conf/spark-defaults.conf.template /data/spark15/conf/spark-defaults.conf
+echo 'spark.driver.memory                7g' >> /data/spark15/conf/spark-defaults.conf
+echo 'spark.executor.memory              7g' >> /data/spark15/conf/spark-defaults.conf
 
 # clean up the setup scripts
 echo 'clean: removing UCB setup scripts'
 rm setup_ucb_complete_plus_postgres.sh
 rm setup_spark.sh
 
-# download the installer and install
 echo 'installing: nodejs'
 yum install -y gcc-c++ make
 curl -sL https://rpm.nodesource.com/setup_8.x | bash -
 yum install -y nodejs
 
-# install mongodb
 echo 'installing: mongodb'
 cat > /etc/yum.repos.d/mongodb-org-3.4.repo <<EOF
 [mongodb-org-3.4]
