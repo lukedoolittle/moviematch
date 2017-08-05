@@ -1,51 +1,36 @@
 #!/bin/bash
-# create the data directory to work from
-mkdir data
-chmod a+rwx /data
+echo 'downloading: java8 installer'
+sudo wget "https://s3.amazonaws.com/moviematch/jdk-8u141-linux-x64.rpm"
 
-# run the UCB setup script which installs Hadoop, Postgres, and Hive
-read -p 'Please enter the location of your attached volume [default is xvdb]: /dev/' locationvar
-locationvar=${locationvar:-xvdb}
-echo 'running: UCB complete setup script'
-wget https://s3.amazonaws.com/ucbdatasciencew205/setup_ucb_complete_plus_postgres.sh
-chmod +x ./setup_ucb_complete_plus_postgres.sh
-./setup_ucb_complete_plus_postgres.sh /dev/$locationvar
+echo 'installing: java8'
+sudo rpm -ivh jdk-8u141-linux-x64.rpm
 
-echo 'running: UCB spark setup script'
-wget https://s3.amazonaws.com/ucbdatasciencew205/setup_spark.sh
-bash ./setup_spark.sh
+echo 'downloading: spark installer'
+wget https://d3kbcqa49mib13.cloudfront.net/spark-2.2.0-bin-hadoop2.7.tgz
+ 
+echo 'installing: spark'
+sudo tar zxvf spark-2.2.0-bin-hadoop2.7.tgz -C /opt
+sudo ln -fs spark-2.2.0-bin-hadoop2.7 /opt/spark
 
-# add pyspark, spark-sql to path for w205 and root
-# and change the pyspark interpreter to use python 2.6
-echo 'configuration: adding environmental variables for spark'
-echo 'export SPARK=/data/spark15' >>/home/w205/.bash_profile
-echo 'export SPARK=/data/spark15' >>.bash_profile
-echo 'export SPARK_HOME=$SPARK' >>/home/w205/.bash_profile
-echo 'export SPARK_HOME=$SPARK' >>.bash_profile
-echo 'export PATH=$SPARK/bin:$PATH' >>/home/w205/.bash_profile
-echo 'export PATH=$SPARK/bin:$PATH' >>.bash_profile
-echo 'export PYSPARK_PYTHON=python2.6' >>/home/w205/.bash_profile
-echo 'export PYSPARK_PYTHON=python2.6' >>.bash_profile
+# add pyspark, spark-sql to path
+echo 'configuration: adding environmental variables'
+echo 'export SPARK_HOME=/opt/spark' >> .bash_profile
+echo 'PATH=$PATH:$SPARK_HOME/bin' >> .bash_profile
+echo 'export PATH' >> .bash_profile
+echo 'export JAVA_HOME=/usr/java/default' >> .bash_profile
+export SPARK_HOME=/opt/spark
+PATH=$PATH:$SPARK_HOME/bin
+export PATH
+export JAVA_HOME=/usr/java/default
 
-# configure the current session as the profile above
-export SPARK=/data/spark15
-export SPARK_HOME=$SPARK
-export PATH=$SPARK/bin:$PATH
-export PYSPARK_PYTHON=python2.6
-
-echo 'configuration: reducing logging for spark'
-cp /data/spark15/conf/log4j.properties.template /data/spark15/conf/log4j.properties
-sed -i '2s/.*/log4j.rootCategory=ERROR, console/' /data/spark15/conf/log4j.properties
-
-echo 'configuration: expanding memory for spark'
-cp /data/spark15/conf/spark-defaults.conf.template /data/spark15/conf/spark-defaults.conf
-echo 'spark.driver.memory                7g' >> /data/spark15/conf/spark-defaults.conf
-echo 'spark.executor.memory              7g' >> /data/spark15/conf/spark-defaults.conf
-
-# clean up the setup scripts
-echo 'clean: removing UCB setup scripts'
-rm setup_ucb_complete_plus_postgres.sh
-rm setup_spark.sh
+echo 'configuration: spark'
+cp $SPARK_HOME/conf/log4j.properties.template $SPARK_HOME/conf/log4j.properties
+sed -i '19s/.*/log4j.rootCategory=ERROR, console/' $SPARK_HOME/conf/log4j.properties
+cp $SPARK_HOME/conf/spark-defaults.conf.template $SPARK_HOME/conf/spark-defaults.conf
+echo 'spark.driver.memory                7g' >> $SPARK_HOME/conf/spark-defaults.conf
+echo 'spark.executor.memory              7g' >> $SPARK_HOME/conf/spark-defaults.conf
+echo 'spark.sql.warehouse.dir         /home/ec2-user' >> $SPARK_HOME/conf/spark-defaults.conf
+echo 'spark.driver.extraJavaOptions -Dderby.system.home=/home/ec2-user' >> $SPARK_HOME/conf/spark-defaults.conf
 
 echo 'installing: nodejs'
 yum install -y gcc-c++ make
@@ -70,9 +55,14 @@ pip install pymongo
 iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8080
 
 # start services needed for this session
-/data/start_metastore.sh
+echo 'service mongod start' >> .bash_profile
 service mongod start
 
 # need to increase the maximum number of open files for
 # larges instances
+echo 'ulimit -n 64000' >> .bash_profile
 ulimit -n 64000
+
+echo 'cleanup'
+rm spark-2.2.0-bin-hadoop2.7.tgz
+rm jdk-8u141-linux-x64.rpm

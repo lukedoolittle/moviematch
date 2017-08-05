@@ -4,19 +4,39 @@ from pyspark import HiveContext
 sc = SparkContext(conf=SparkConf().setAppName("modelGeneration"))
 sqlContext = HiveContext(sc)
 
-sqlContext.sql('DROP TABLE IF EXISTS movie_ratings')
-sqlContext.sql("""CREATE TABLE movie_ratings AS SELECT 
-CAST(user_id AS INT) user_id,
-CAST(movie_id AS INT) movie_id,
-CAST(rating AS DECIMAL(2,1)) rating
-FROM movielens_ratings_raw
-where user_id <> 'userId'
-UNION
-SELECT 
-CAST(user_id AS INT) user_id,
-CAST(movielens_id AS INT) movie_id,
-CAST(rating AS DECIMAL(2,1)) rating
-FROM NP_RATINGS_RAW
-JOIN movie_id_mapping
-ON movie_id_mapping.netflix_id = NP_RATINGS_RAW.movie_id
-where user_id <> 'userId'""")
+print('creating temporary netflix table')
+ratings = sqlContext.read.load('file:///home/ec2-user/moviematch/data/np/netflix_ratings.csv', 
+                               format='com.databricks.spark.csv',
+                               header='true',
+                               inferSchema='true')
+ratings.createOrReplaceTempView('netflix_ratings')
+
+print('creating temporary movie id mapping table')
+ratings = sqlContext.read.load('file:///home/ec2-user/moviematch/data/np/movie_ids.csv', 
+                               format='com.databricks.spark.csv',
+                               header='true',
+                               inferSchema='true')
+ratings.createOrReplaceTempView('movie_id_mapping')
+
+print('creating temporary movielens table')
+ratings = sqlContext.read.load('file:///home/ec2-user/moviematch/data/np/movielens_ratings.csv', 
+                               format='com.databricks.spark.csv',
+                               header='true',
+                               inferSchema='true')
+ratings.createOrReplaceTempView('movielens_ratings')
+
+print('creating movie_ratings table')
+sqlContext.sql('drop table if exists movie_ratings')
+sqlContext.sql("""create table movie_ratings as select
+userId user_id,
+movieId movie_id,
+rating
+from movielens_ratings
+union
+select
+user_id,
+movie_id,
+rating
+from netflix_ratings
+join movie_id_mapping
+on netflix_id = movie_id""")
