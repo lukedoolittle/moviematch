@@ -1,8 +1,9 @@
 #!/bin/bash
 
+cd data
+
 hdfs dfs -mkdir /user/w205/moviematch/netflix_ratings
 hdfs dfs -mkdir /user/w205/moviematch/netflix_titles
-hdfs dfs -mkdir /user/w205/moviematch/movie_id_map
 
 echo 'creating: ratings schema in hive'
 cd np
@@ -13,4 +14,6 @@ echo 'running: netflix prize load script'
 
 echo 'creating: ratings table in spark'
 spark-sql -f create_tables.sql
+cd ..
+
 cd ..

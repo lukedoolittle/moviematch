@@ -19,7 +19,6 @@ WITH SERDEPROPERTIES(
 STORED AS TEXTFILE
 LOCATION '/user/w205/moviematch/netflix_titles';
 
-
 CREATE EXTERNAL TABLE IF NOT EXISTS movie_id_mapping
 (movielens_id string,
 netflix_id string)

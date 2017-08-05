@@ -68,3 +68,7 @@ pip install pymongo
 
 # forward HTTP traffic to port 8080
 iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8080
+
+# start services needed for this session
+/data/start_metastore.sh
+service mongod start

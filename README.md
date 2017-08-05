@@ -17,30 +17,20 @@ Download and run the setup script
       chmod +x setup.sh
       ./setup.sh
 	  
-Start the Hive metastore and Mongodb, move into the w205 user and clone this repository
+Move into the w205 user and clone this repository
 
-      /data/start_metastore.sh
-      service mongod start
       su - w205
       git clone https://github.com/lukedoolittle/moviematch.git
+      cd moviematch
 
 Load the initial static set of data
 
-      cd moviematch/data
-      ./initial_data_load.sh
+      ./data/initial_data_load.sh
 
 Load the secondary set of data
 
-      ./additional_data_load.sh
+      ./data/additional_data_load.sh
       
 Build and run webserver
 
-      cd moviematch/webserver
-      npm i
-      npm run start
-
-Build and run apiserver
-
-      cd moviematch/apiserver
-      npm i
-      node src/server.js
+      ./launch.sh

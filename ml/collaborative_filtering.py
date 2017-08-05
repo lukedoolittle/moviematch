@@ -1,4 +1,5 @@
 import time
+from math import sqrt
 from pyspark import SparkConf, SparkContext
 from pyspark import HiveContext
 from pyspark.mllib.recommendation import ALS, MatrixFactorizationModel, Rating
@@ -18,7 +19,9 @@ class CollaborativeFiltering:
 
     def recommend(self,
                   given_ratings,
+                  user_id,
                   hyperparameters):
+        # combine given ratings with all static ratings
         user_ratings = self.sc.parallelize(given_ratings)
         ratings = self._get_ratings()
         complete_ratings = ratings.union(user_ratings)
@@ -26,50 +29,52 @@ class CollaborativeFiltering:
         # train the model on ALL ratings
         model = ALS.train(complete_ratings,
                           rank=hyperparameters['rank'],
-                          iterations=hyperparameters['iterations'])
-        unrated_movies = (ratings
-                          .map(lambda x: x[1])
-                          .distinct()
-                          .filter(lambda x: x not in map(lambda y: y[1], given_ratings))
-                          .map(lambda x: (0, x)))
+                          iterations=hyperparameters['iterations'],
+                          lambda_=hyperparameters['lambda'])
 
-        # predict the ratings of all movies the user has not rated and print
-        # a json formatted version of the results to the console
-        predictions = model.predictAll(unrated_movies)
-        return predictions.sortBy(lambda x: -x.rating).toDF()
+        # should be filtering out rated movies here but we're not
+        '''
+        .filter(lambda x: x not in map(lambda y: y[1], given_ratings))
+        '''
+        recomendations = model.recommendProducts(user_id, 20)
+        return [{'movie_id': l.product, 'rating': l.rating} for l in recomendations]
 
     def _calculate_performance(self,
                                rank,
-                               iterations):
+                               iterations,
+                               lam):
+        # (user_id, movie_id, rating)
         ratings = self._get_ratings()
-        testdata = ratings.map(lambda p: (p[0], p[1]))
+        training, test = ratings.randomSplit([.8, .2], seed=0)
+        test_for_prediction = test.map(lambda t: (t[0], t[1]))
 
         # train on all the data and then predict over every datapoint
         time1 = time.time()
-        model = ALS.train(ratings,
+        model = ALS.train(training,
                           rank=rank,
-                          iterations=iterations)
-        predictions = (model
-                       .predictAll(testdata)
-                       .map(lambda r: ((r[0], r[1]), r[2])))
+                          iterations=iterations,
+                          lambda_=lam)
+        predictions = model.predictAll(test_for_prediction)
         time2 = time.time()
 
         # calculate the MSE and time to train and predict
-        rates_and_predictions = (ratings
-                                 .map(lambda r: ((r[0], r[1]), r[2]))
-                                 .join(predictions))
-        mean_square_error = (rates_and_predictions
-                             .map(lambda r: (r[1][0] - r[1][1])**2)
-                             .mean())
-        print('Rank: {0} Iterations: {1} Mean Squared Error: {2:.3f} Time: {3:.3f} sec'.format(
+        true_reorg = test.map(lambda x: ((x[0], x[1]), x[2]))
+        pred_reorg = predictions.map(lambda x: ((x[0], x[1]), x[2]))
+        true_pred = true_reorg.join(pred_reorg)
+        error = sqrt(true_pred.map(lambda r: (r[1][0] - r[1][1])**2).mean())
+
+        print('Rank: {0} Iterations: {1} Lambda: {2} Mean Squared Error: {3:.3f} Time: {4:.3f} sec'.format(
             rank,
             iterations,
-            mean_square_error,
+            lam,
+            error,
             time2-time1))
 
     def hyperparameter_search(self,
                               hyperparameters):
         for itr in hyperparameters['iterations']:
             for rnk in hyperparameters['rank']:
-                self._calculate_performance(rnk,
-                                            itr)
+                for lmb in hyperparameters['lambda']:
+                    self._calculate_performance(rnk,
+                                                itr,
+                                                lmb)
