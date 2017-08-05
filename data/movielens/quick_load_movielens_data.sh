@@ -15,7 +15,7 @@ echo 'downloading: small movielens dataset'
 wget https://s3.amazonaws.com/moviematch/movielens_ratings_small.tar.gz
 tar -xzf movielens_ratings_small.tar.gz
 
-echo 'moving: movielens dataset into hdfs'
+echo 'moving: small movielens dataset into hdfs'
 hdfs dfs -put ratings.csv /user/w205/moviematch/movielens_ratings_small
 
 echo 'cleaning: small movielens dataset'

@@ -16,7 +16,7 @@ class CollaborativeFiltering:
         # get ratings from spark movie_ratings table
         return (self
                 ._sqlContext
-                .sql('select * from {}'.format(self._ratings_table_name))
+                .sql('select * from {0}'.format(self._ratings_table_name))
                 .rdd
                 .map(lambda l: (l.user_id, l.movie_id, l.rating)))
 
