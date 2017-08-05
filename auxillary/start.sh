@@ -4,3 +4,4 @@ mount -t ext4 /dev/xvdb /data
 /data/start_postgres.sh
 /data/start_metastore.sh
 service mongod start
+ulimit -n 64000

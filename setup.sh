@@ -72,3 +72,7 @@ iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8080
 # start services needed for this session
 /data/start_metastore.sh
 service mongod start
+
+# need to increase the maximum number of open files for
+# larges instances
+ulimit -n 64000

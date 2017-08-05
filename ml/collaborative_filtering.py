@@ -5,15 +5,18 @@ from pyspark import HiveContext
 from pyspark.mllib.recommendation import ALS, MatrixFactorizationModel, Rating
 
 class CollaborativeFiltering:
-    def __init__(self):
-        self.sc = SparkContext(conf=SparkConf().setAppName("modelGeneration"))
-        self.sqlContext = HiveContext(self.sc)
+    def __init__(
+            self,
+            ratings_table):
+        self._sc = SparkContext(conf=SparkConf().setAppName("modelGeneration"))
+        self._sqlContext = HiveContext(self._sc)
+        self._ratings_table_name = ratings_table
 
     def _get_ratings(self):
         # get ratings from spark movie_ratings table
         return (self
-                .sqlContext
-                .sql('select * from movie_ratings')
+                ._sqlContext
+                .sql('select * from {}'.format(self._ratings_table_name))
                 .rdd
                 .map(lambda l: (l.user_id, l.movie_id, l.rating)))
 
@@ -22,7 +25,7 @@ class CollaborativeFiltering:
                   user_id,
                   hyperparameters):
         # combine given ratings with all static ratings
-        user_ratings = self.sc.parallelize(given_ratings)
+        user_ratings = self._sc.parallelize(given_ratings)
         ratings = self._get_ratings()
         complete_ratings = ratings.union(user_ratings)
 
