@@ -15,7 +15,7 @@ echo 'running: movielens load script'
 ./quick_load_movielens_data.sh
 
 echo 'creating: ratings table in spark'
-spark-sql -f create_tables.sql
+spark-submit create_tables.py
 cd ..
 
 echo 'running: movie metadata load script'

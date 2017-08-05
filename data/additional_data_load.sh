@@ -13,7 +13,7 @@ echo 'running: netflix prize load script'
 ./quick_load_np_data.sh
 
 echo 'creating: ratings table in spark'
-spark-sql -f create_tables.sql
+spark-submit create_tables.py
 cd ..
 
 cd ..
