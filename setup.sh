@@ -24,44 +24,50 @@ export PATH
 export JAVA_HOME=/usr/java/default
 
 echo 'configuration: spark'
-cp $SPARK_HOME/conf/log4j.properties.template $SPARK_HOME/conf/log4j.properties
-sed -i '19s/.*/log4j.rootCategory=ERROR, console/' $SPARK_HOME/conf/log4j.properties
-cp $SPARK_HOME/conf/spark-defaults.conf.template $SPARK_HOME/conf/spark-defaults.conf
-echo 'spark.driver.memory                7g' >> $SPARK_HOME/conf/spark-defaults.conf
-echo 'spark.executor.memory              7g' >> $SPARK_HOME/conf/spark-defaults.conf
-echo 'spark.sql.warehouse.dir         /home/ec2-user' >> $SPARK_HOME/conf/spark-defaults.conf
-echo 'spark.driver.extraJavaOptions -Dderby.system.home=/home/ec2-user' >> $SPARK_HOME/conf/spark-defaults.conf
+cp /opt/spark/conf/log4j.properties.template /opt/spark/conf/log4j.properties
+sed -i '19s/.*/log4j.rootCategory=ERROR, console/' /opt/spark/conf/log4j.properties
+cp /opt/spark/conf/spark-defaults.conf.template /opt/spark/conf/spark-defaults.conf
+echo 'spark.driver.memory                7g' >> /opt/spark/conf/spark-defaults.conf
+echo 'spark.executor.memory              7g' >> /opt/spark/conf/spark-defaults.conf
+echo 'spark.sql.warehouse.dir         /home/ec2-user' >> /opt/spark/conf/spark-defaults.conf
+echo 'spark.driver.extraJavaOptions -Dderby.system.home=/home/ec2-user' >> /opt/spark/conf/spark-defaults.conf
 
 echo 'installing: nodejs'
-yum install -y gcc-c++ make
-curl -sL https://rpm.nodesource.com/setup_8.x | bash -
-yum install -y nodejs
+sudo yum install -y gcc-c++ make
+curl -sL https://rpm.nodesource.com/setup_8.x | sudo -E bash -
+sudo yum install -y nodejs
 
 echo 'installing: mongodb'
-cat > /etc/yum.repos.d/mongodb-org-3.4.repo <<EOF
-[mongodb-org-3.4]
+echo "[mongodb-org-3.0]
 name=MongoDB Repository
-baseurl=https://repo.mongodb.org/yum/redhat/\$releasever/mongodb-org/3.4/x86_64/
-gpgcheck=1
-enabled=1
-gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
-EOF
-yum install -y mongodb-org
+baseurl=https://repo.mongodb.org/yum/amazon/2013.03/mongodb-org/3.0/x86_64/
+gpgcheck=0
+enabled=1" | sudo tee -a /etc/yum.repos.d/mongodb-org-3.0.repo
+sudo yum install -y mongodb-org
 
 # install mongodb python interface
-pip install pymongo
+sudo pip install pymongo
 
 # forward HTTP traffic to port 8080
-iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8080
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8080
 
 # start services needed for this session
-echo 'service mongod start' >> .bash_profile
-service mongod start
+sudo chkconfig mongod on
+sudo service mongod start
+echo '* soft nofile 64000
+* hard nofile 64000
+* soft nproc 64000
+* hard nproc 64000' | sudo tee /etc/security/limits.d/90-mongodb.conf
 
 # need to increase the maximum number of open files for
 # larges instances
-echo 'ulimit -n 64000' >> .bash_profile
-ulimit -n 64000
+echo '*       soft  nofile  64000' | sudo tee -a /etc/security/limits.conf
+echo '*       hard  nofile  64000' | sudo tee -a /etc/security/limits.conf
+echo '*       hard  nproc  64000' | sudo tee -a /etc/security/limits.conf
+echo '*       hard  nproc  64000' | sudo tee -a /etc/security/limits.conf
+sudo ulimit -n 64000
+
+sudo yum install git
 
 echo 'cleanup'
 rm spark-2.2.0-bin-hadoop2.7.tgz

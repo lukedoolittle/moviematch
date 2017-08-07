@@ -19,10 +19,9 @@ Download and run the setup script
 	  
 Move into the w205 user and clone this repository
 
-      su - w205
       git clone https://github.com/lukedoolittle/moviematch.git
-      git checkout -b alternate_ami
       cd moviematch
+      git checkout -b alternate_ami
 
 Load the initial static set of data
 
