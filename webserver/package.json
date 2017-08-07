@@ -4,11 +4,6 @@
     "description": "A website to receive movie recommendations based on ratings.",
     "main": "src/server.js",
     "repository": "https://github.com/lukedoolittle/moviematch",
-    "proxy": {
-        "/api/*": {
-            "target": "http://localhost:8081"
-        }
-    },
     "scripts": {
         "start": "concurrently \"cross-env NODE_ENV=production node_modules/.bin/babel-node --presets react,es2015 src/server.js\" \"cd ../apiserver && node src/server.js\"",
         "start-stage": "concurrently \"cross-env NODE_ENV=stage node_modules/.bin/babel-node --presets react,es2015 src/server.js\" \"cd ../apiserver && node src/server.js\"",
@@ -30,6 +25,7 @@
         "cross-env": "^3.1.4",
         "ejs": "^2.5.1",
         "express": "^4.14.0",
+        "http-proxy-middleware": "^0.17.4",
         "react": "^15.3.1",
         "react-dom": "^15.3.1",
         "react-loading-overlay": "^0.2.5",

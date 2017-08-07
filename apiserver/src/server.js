@@ -52,11 +52,11 @@ app.post('/api/predict', function (req, res) {
                        function(data) {
                          mergedData = data.map(function(a) {
                            return {
-                             movie_id: a.movielens_id,
-                             path: a.poster_path,
+                             movie_id: a.movie_id,
+                             path: a.path,
                              title: a.title,
                              rating: Math.round(_.where(result, 
-                                                        {movie_id: parseInt(a.movielens_id)})[0]
+                                                        {movie_id: parseInt(a.movie_id)})[0]
                                                  .rating/maximum_rating*100)
                            }
                          });
