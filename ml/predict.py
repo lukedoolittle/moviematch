@@ -4,7 +4,7 @@ import decimal
 from collaborative_filtering import CollaborativeFiltering
 
 # define the recommendation algorithm and the hyperparameters
-recommender = CollaborativeFiltering('movie_ratings_small')
+recommender = CollaborativeFiltering('movie_ratings')
 hyperparameters = {'rank': 10, 'iterations': 10, 'lambda': .1}
 user_id = 0
 

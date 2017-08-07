@@ -23,6 +23,10 @@ Move into the w205 user and clone this repository
       cd moviematch
       git checkout -b alternate_ami origin/alternate_ami
 
+Load the initial SMALL static set of data
+
+      ./data/small_data_load.sh
+
 Load the initial static set of data
 
       ./data/initial_data_load.sh
