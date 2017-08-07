@@ -13,8 +13,8 @@ spark-submit create_tables.py
 
 # Remove the storage-heavy files that were just put into hdfs
 echo 'cleaning: netflix prize dataset'
-rm netflix_ratings.tar.gz
-rm netflix_ratings.csv
-rm movie_ids.csv
-rm movielens_ratings.csv
-rm movielens_ratings.tar.gz
+rm -f netflix_ratings.tar.gz
+rm -f netflix_ratings.csv
+rm -f movie_ids.csv
+rm -f movielens_ratings.csv
+rm -f movielens_ratings.tar.gz

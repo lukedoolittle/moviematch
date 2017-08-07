@@ -12,7 +12,7 @@ echo 'creating: tables in spark'
 spark-submit create_tables.py
 
 echo 'cleaning'
-rm movielens_ratings.csv
-rm movielens_ratings.tar.gz
-rm ratings.csv
-rm movielens_ratings_small.tar.gz
+rm -f movielens_ratings.csv
+rm -f movielens_ratings.tar.gz
+rm -f ratings.csv
+rm -f movielens_ratings_small.tar.gz

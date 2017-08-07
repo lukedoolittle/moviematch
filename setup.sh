@@ -67,8 +67,8 @@ echo '*       hard  nproc  64000' | sudo tee -a /etc/security/limits.conf
 echo '*       hard  nproc  64000' | sudo tee -a /etc/security/limits.conf
 sudo ulimit -n 64000
 
-sudo yum install git
+sudo yum install -y git
 
 echo 'cleanup'
-rm spark-2.2.0-bin-hadoop2.7.tgz
-rm jdk-8u141-linux-x64.rpm
+rm -f spark-2.2.0-bin-hadoop2.7.tgz
+rm -f jdk-8u141-linux-x64.rpm

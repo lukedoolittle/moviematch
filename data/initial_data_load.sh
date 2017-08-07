@@ -4,7 +4,7 @@ cd data
 
 echo 'running: movielens load script'
 cd movielens
-./quick_load_movielens_data.sh
+./load_movielens_data.sh
 cd ..
 
 echo 'running: movie metadata load script'
