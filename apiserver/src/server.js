@@ -17,14 +17,20 @@ var mongo_get_multiple = function(ids, callback) {
     }
     query = { $or:[] };
     for (const x of ids) {
-      query.$or.push({ movielens_id: x });
+      query.$or.push({ "movielens_id": x });
     }
     db.collection('movies').find(query).toArray(function(err, result) {
       if (err) {
         console.log('error processing query results');
         throw err;
       }
-      callback(result);
+      callback(result.map(function(a) {
+                           return {
+                             movie_id: a.movielens_id,
+                             path: a.poster_path,
+                             title: a.title
+                           }
+      }));
     });
   });
 }
@@ -62,7 +68,7 @@ app.post('/api/predict', function (req, res) {
 app.get('/api/movies/ids/:ids', function (req, res) {
   console.log('request: ' + req.path);
   mongo_get_multiple(req.params['ids'].split(','), 
-                     res.send);
+                     (result) => { res.send(result) });
 });
 
 app.get('/api/movies/random/:count', function (req, res) {

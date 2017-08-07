@@ -22,7 +22,7 @@ export default class IndexPage extends React.Component {
   }
 
   componentDidMount() {
-    fetch('/api/movies/random/10')
+    fetch('/api/movies/ids/5317,15124,6287,1905,11283,16242,12470,15582,9340,6972,457,2152,3860,15107,1220,5496,1962,571,8644,14538')
       .then(response => { return response.json(); })
       .then(result => {
         this.setState({movies: result,
