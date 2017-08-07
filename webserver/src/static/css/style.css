@@ -8,10 +8,21 @@ input::-ms-clear{display:none}input[type=number]{-moz-appearance:textfield}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{appearance:none}
 svg{display:inline-flex}img{max-width:100%;display:block}
 
+@font-face {
+	font-family: 'DINPro';
+  src: url('/font/DINPro-Regular_13937.eot') format('opentype');
+  src: url('/font/DINPro-Regular_13937.eot?#iefix') format('embedded-opentype'),
+       url('/font/DINPro-Regular_13937.woff') format('woff'),
+       url('/font/DINPro-Regular_13937.ttf') format('truetype'),
+       url('/font/DINPro-Regular_13937.svg#DINPro-Regular_13937') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
 @font-face{
     font-family: "The-Movies";
     src: url('/font/see_you_at_the_movies.eot') format('opentype');
-    src: url('/font/see_you_at_the_movieseot?#iefix') format('embedded-opentype'),
+    src: url('/font/see_you_at_the_movies.eot?#iefix') format('embedded-opentype'),
          url('/font/see_you_at_the_movies.woff2') format('woff2'),
          url('/font/See-You-At-The-Movies.woff') format('woff'),
          url('/font/see_you_at_the_movies.ttf') format('truetype'),
@@ -83,7 +94,7 @@ footer p {
   clear: both;
   text-align: center;
   color: white;
-  font-family: The-Movies;
+  font-family: DINPro;
 }
 
 .home .movies-selector .category-header {
@@ -96,7 +107,7 @@ footer p {
 }
 
 .home .movies-selector .movies-ratings{
-  font-size: 2.5em;
+  font-size: 2em;
 }
 
 .home .movies-selector .movies-ratings .movie-rating {
@@ -110,7 +121,11 @@ footer p {
 }
 
 .home .movies-selector .movies-ratings .movie-rating .movie-rating-tooltip {
-  font-size: 50px !important;
+  font-size: 20px !important;
+}
+
+.home .movies-selector .movie-reco .movie-reco-tooltip {
+  font-size: 20px !important;
 }
 
 .home .movies-selector .movies-ratings .movie-rating img {
@@ -141,12 +156,10 @@ footer p {
   position: relative;
   width: 100%;
   color: white;
-  font-size: 50px;
+  font-size: 20px;
 }
 
-.home .movies-selector .movie-reco .movie-reco-tooltip {
-  font-size: 50px !important;
-}
+
 
 .home .movies-selector .movie-reco img {
   margin: 0;
@@ -309,10 +322,12 @@ nav.movies-menu a.active {
  .my-button:hover{color:#000!important;background-color:#ccc!important}
 
  .my-button{
-   color: #aaa!important;
+    color: #aaa!important;
     background-color: #000!important;
     user-select: none;
-    border: none;
+    border-width: 1px;
+    border-color: #aaa;
+    border-style: solid;
     display: inline-block;
     outline: 0;
     padding: 8px 16px;
@@ -324,7 +339,7 @@ nav.movies-menu a.active {
     white-space: nowrap;
     -webkit-appearance: button;
     text-transform: none;
-    font: inherit;
+    font-size: 20px;
     margin: 0;
     box-sizing: inherit;
     align-items: flex-start;

@@ -18,10 +18,12 @@ echo 'export SPARK_HOME=/opt/spark' >> .bash_profile
 echo 'PATH=$PATH:$SPARK_HOME/bin' >> .bash_profile
 echo 'export PATH' >> .bash_profile
 echo 'export JAVA_HOME=/usr/java/default' >> .bash_profile
+echo 'export PYSPARK_PYTHON=python2.7' >> .bash_profile
 export SPARK_HOME=/opt/spark
 PATH=$PATH:$SPARK_HOME/bin
 export PATH
 export JAVA_HOME=/usr/java/default
+export PYSPARK_PYTHON=python2.7
 
 echo 'configuration: spark'
 cp /opt/spark/conf/log4j.properties.template /opt/spark/conf/log4j.properties
@@ -45,8 +47,9 @@ gpgcheck=0
 enabled=1" | sudo tee -a /etc/yum.repos.d/mongodb-org-3.0.repo
 sudo yum install -y mongodb-org
 
-# install mongodb python interface
+# install necessary python packages
 sudo pip install pymongo
+sudo pip install numpy
 
 # forward HTTP traffic to port 8080
 sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8080

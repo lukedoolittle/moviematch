@@ -22,7 +22,7 @@ export default class IndexPage extends React.Component {
   }
 
   componentDidMount() {
-    fetch('/api/movies/ids/5317,15124,6287,1905,11283,16242,12470,15582,9340,6972,457,2152,3860,15107,1220,5496,1962,571,8644,14538')
+    fetch('/api/movies/ids/356,296,318,593,260,480,2571,1,527,589,1196,110,1270,608,2858,1198,780,1210,588,457')
       .then(response => { return response.json(); })
       .then(result => {
         this.setState({movies: result,
@@ -95,7 +95,7 @@ export default class IndexPage extends React.Component {
               active={this.state.loading}
               spinner={true}
               animate={true}
-              text='Generating recommendations...'>
+              text='Generating Recommendations...'>
               <TransitionGroup> 
                 {movies}
               </TransitionGroup>

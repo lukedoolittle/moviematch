@@ -21,7 +21,7 @@ export default class MovieRating extends React.Component {
           <p data-class='movie-rating-tooltip' data-tip={`${this.props.data.title}`}>
               <img src={`http://image.tmdb.org/t/p/w185/${this.props.data.path}`}/>
           </p>
-          <ReactTooltip />
+          <ReactTooltip delayShow={300} />
           <StarRatingComponent 
                     name={this.props.data.movie_id}
                     starCount={5}
