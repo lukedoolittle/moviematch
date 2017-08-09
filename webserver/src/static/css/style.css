@@ -20,13 +20,12 @@ svg{display:inline-flex}img{max-width:100%;display:block}
 }
 
 @font-face{
-    font-family: "The-Movies";
-    src: url('/font/see_you_at_the_movies.eot') format('opentype');
-    src: url('/font/see_you_at_the_movies.eot?#iefix') format('embedded-opentype'),
-         url('/font/see_you_at_the_movies.woff2') format('woff2'),
-         url('/font/See-You-At-The-Movies.woff') format('woff'),
-         url('/font/see_you_at_the_movies.ttf') format('truetype'),
-         url('/font/See_You_At_The_Movies.svg#See_You_At_The_Movies') format('svg');
+    font-family: "Fira-Code";
+    src: url('/font/FiraCode-Regular.eot') format('opentype');
+    src: url('/font/FiraCode-Regular.eot?#iefix') format('embedded-opentype'),
+         url('/font/FiraCode-Regular.woff2') format('woff2'),
+         url('/font/FiraCode-Regular.woff') format('woff'),
+         url('/font/FiraCode-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -41,9 +40,9 @@ html {
 header {
   padding-left: 1em;
   padding-top: 40px;
-  padding-bottom: 0px;
-  font-family: The-Movies;
-  font-size: 120px;
+  padding-bottom: 20px;
+  font-family: Fira-Code;
+  font-size: 60px;
   color: white;
 }
 
@@ -86,9 +85,9 @@ footer p {
 }
 
 .home .movies-selector .category-header {
-  font-family: The-Movies;
-  border-bottom:1px solid #fff;
-  font-size: 60px;
+  font-family: Fira-Code;
+
+  font-size: 25px;
   width: 60%;
   text-align: right;
   margin: auto;

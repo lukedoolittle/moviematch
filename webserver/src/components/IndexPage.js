@@ -78,7 +78,7 @@ export default class IndexPage extends React.Component {
     return (
       <div className="home">
         <div className="movies-selector">
-          <div className="category-header">ratings</div>
+          <div className="category-header">ratings:</div>
           <div className="movies-ratings">
             <Loadable
               active={this.state.loading}
@@ -92,7 +92,7 @@ export default class IndexPage extends React.Component {
           </div>
         </div>
         <div className="movies-selector">
-          <div className="category-header">recommendations</div>
+          <div className="category-header">recommendations:</div>
           {recommendations.slice(0,5).map(recoData => <MovieReco key={recoData.movie_id} {...recoData } />)}
         </div>
       </div>
