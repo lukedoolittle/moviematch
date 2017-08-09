@@ -48,7 +48,7 @@ header {
   padding-top: 40px;
   padding-bottom: 0px;
   font-family: The-Movies;
-  font-size: 140px;
+  font-size: 120px;
   color: white;
 }
 
@@ -100,7 +100,7 @@ footer p {
 .home .movies-selector .category-header {
   font-family: The-Movies;
   border-bottom:1px solid #fff;
-  font-size: 70px;
+  font-size: 60px;
   width: 60%;
   text-align: right;
   margin: auto;
@@ -330,7 +330,7 @@ nav.movies-menu a.active {
     border-style: solid;
     display: inline-block;
     outline: 0;
-    padding: 8px 16px;
+    padding: 7px 14px;
     vertical-align: middle;
     overflow: hidden;
     text-decoration: none;
@@ -339,7 +339,7 @@ nav.movies-menu a.active {
     white-space: nowrap;
     -webkit-appearance: button;
     text-transform: none;
-    font-size: 20px;
+    font-size: 15px;
     margin: 0;
     box-sizing: inherit;
     align-items: flex-start;
