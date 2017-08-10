@@ -28,7 +28,8 @@ var mongo_get_multiple = function(ids, callback) {
                            return {
                              movie_id: a.movielens_id,
                              path: a.poster_path,
-                             title: a.title
+                             title: a.title,
+                             vote_count: a.vote_count
                            }
       }));
     });
@@ -50,7 +51,10 @@ app.post('/api/predict', function (req, res) {
     maximum_rating = result[0].rating;
     mongo_get_multiple(result.map(function(a) { return a.movie_id.toString() }), 
                        function(data) {
-                         mergedData = data.map(function(a) {
+                         result.sort(function(a, b) {
+                           return parseInt(b.vote_count) - parseInt(a.vote_count);
+                         });
+                         mergedData = data.slice(0,10).map(function(a) {
                            return {
                              movie_id: a.movie_id,
                              path: a.path,

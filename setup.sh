@@ -53,6 +53,7 @@ sudo pip install numpy
 
 # forward HTTP traffic to port 8080
 sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8080
+echo 'iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8080' >> .bash_profile
 
 # start services needed for this session
 sudo chkconfig mongod on

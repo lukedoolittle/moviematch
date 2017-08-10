@@ -22,7 +22,7 @@ export default class IndexPage extends React.Component {
   }
 
   componentDidMount() {
-    fetch('/api/movies/ids/356,296,318,593,260,480,2571,1,527,589,1196,110,1270,608,2858,1198,780,1210,588,457')
+    fetch('/api/movies/ids/356,296,318,593,260,480,2571,1,527,589,110,1270,608,2858,780,588,457,79132,91500,109487,72998')
       .then(response => { return response.json(); })
       .then(result => {
         this.setState({movies: result});

@@ -39,7 +39,7 @@ class CollaborativeFiltering:
         '''
         .filter(lambda x: x not in map(lambda y: y[1], given_ratings))
         '''
-        recomendations = model.recommendProducts(user_id, 20)
+        recomendations = model.recommendProducts(user_id, 30)
         return [{'movie_id': l.product, 'rating': l.rating} for l in recomendations]
 
     def _calculate_performance(self,

@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import StarRatingComponent from 'react-star-rating-component';
 import ReactTooltip from 'react-tooltip'
 import ClickButton from './ClickButton'
 import Rater from 'react-rater'
