@@ -291,6 +291,11 @@ nav.movies-menu a.active {
   display: inline-block;
   line-height: normal; 
 }
+
+.react-rater div {
+  display: inline;
+}
+
 .react-rater a {
   cursor: pointer;
   color: #444;
