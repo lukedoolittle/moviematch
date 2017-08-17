@@ -6,24 +6,20 @@ Launch the vanilla UCB AMI `ami-a4c7edb2` from AWS ([shortcut to east-1](https:/
 
 * The instance must have at least 8 GB of RAM
 * The instance must have at least 20 GB of storage
-
-(optional) Update the instance and reboot
-
-      sudo yum install epel-release && sudo yum update -y && sudo reboot
 	  
-Download and run the setup script
+Download and run the setup script then reboot
 
-      wget https://raw.githubusercontent.com/lukedoolittle/moviematch/alternate_ami/setup.sh
+      wget https://raw.githubusercontent.com/lukedoolittle/moviematch/master/setup.sh
       chmod +x setup.sh
       ./setup.sh
+      sudo reboot
 	  
-Move into the w205 user and clone this repository
+Clone this repository and move into the directory
 
       git clone https://github.com/lukedoolittle/moviematch.git
       cd moviematch
-      git checkout -b alternate_ami origin/alternate_ami
 
-Load the initial SMALL static set of data
+Load the initial SMALL static set of data (optional)
 
       ./data/small_data_load.sh
 
