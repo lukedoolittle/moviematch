@@ -17,14 +17,21 @@ var mongo_get_multiple = function(ids, callback) {
     }
     query = { $or:[] };
     for (const x of ids) {
-      query.$or.push({ movielens_id: x });
+      query.$or.push({ "movielens_id": x });
     }
     db.collection('movies').find(query).toArray(function(err, result) {
       if (err) {
         console.log('error processing query results');
         throw err;
       }
-      callback(result);
+      callback(result.map(function(a) {
+                           return {
+                             movie_id: a.movielens_id,
+                             path: a.poster_path,
+                             title: a.title,
+                             vote_count: a.vote_count
+                           }
+      }));
     });
   });
 }
@@ -44,13 +51,16 @@ app.post('/api/predict', function (req, res) {
     maximum_rating = result[0].rating;
     mongo_get_multiple(result.map(function(a) { return a.movie_id.toString() }), 
                        function(data) {
-                         mergedData = data.map(function(a) {
+                         result.sort(function(a, b) {
+                           return parseInt(b.vote_count) - parseInt(a.vote_count);
+                         });
+                         mergedData = data.slice(0,10).map(function(a) {
                            return {
-                             movie_id: a.movielens_id,
-                             path: a.poster_path,
+                             movie_id: a.movie_id,
+                             path: a.path,
                              title: a.title,
                              rating: Math.round(_.where(result, 
-                                                        {movie_id: parseInt(a.movielens_id)})[0]
+                                                        {movie_id: parseInt(a.movie_id)})[0]
                                                  .rating/maximum_rating*100)
                            }
                          });
@@ -62,7 +72,7 @@ app.post('/api/predict', function (req, res) {
 app.get('/api/movies/ids/:ids', function (req, res) {
   console.log('request: ' + req.path);
   mongo_get_multiple(req.params['ids'].split(','), 
-                     res.send);
+                     (result) => { res.send(result) });
 });
 
 app.get('/api/movies/random/:count', function (req, res) {

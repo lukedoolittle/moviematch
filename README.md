@@ -2,10 +2,10 @@
 
 ### Create EC2 Instance
 
-Launch the vanilla UCB AMI `ami-be0d5fd4` from AWS ([shortcut to east-1](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-be0d5fd4)).
+Launch the vanilla UCB AMI `ami-a4c7edb2` from AWS ([shortcut to east-1](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-a4c7edb2)).
 
 * The instance must have at least 8 GB of RAM
-* You must attach additional storage in the form of an EBS with at least 20 GB of space.
+* The instance must have at least 20 GB of storage
 
 (optional) Update the instance and reboot
 
@@ -13,15 +13,19 @@ Launch the vanilla UCB AMI `ami-be0d5fd4` from AWS ([shortcut to east-1](https:/
 	  
 Download and run the setup script
 
-      wget https://raw.githubusercontent.com/lukedoolittle/moviematch/master/setup.sh
+      wget https://raw.githubusercontent.com/lukedoolittle/moviematch/alternate_ami/setup.sh
       chmod +x setup.sh
       ./setup.sh
 	  
 Move into the w205 user and clone this repository
 
-      su - w205
       git clone https://github.com/lukedoolittle/moviematch.git
       cd moviematch
+      git checkout -b alternate_ami origin/alternate_ami
+
+Load the initial SMALL static set of data
+
+      ./data/small_data_load.sh
 
 Load the initial static set of data
 

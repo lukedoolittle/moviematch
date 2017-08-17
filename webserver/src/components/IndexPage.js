@@ -22,42 +22,31 @@ export default class IndexPage extends React.Component {
   }
 
   componentDidMount() {
-    fetch('/api/movies/random/10')
+    fetch('/api/movies/ids/356,296,318,593,260,480,2571,1,527,589,110,1270,608,2858,780,588,457,79132,91500,109487,72998')
       .then(response => { return response.json(); })
       .then(result => {
-        this.setState({movies: result,
-                       ratings: this.state.ratings, 
-                       recommendations: this.state.recommendations,
-                       loading: this.state.loading});
+        this.setState({movies: result});
     });
   }
 
   onRecosReceived(recommendations){
-    this.setState({movies: this.state.movies,
-                   ratings: this.state.ratings, 
-                   recommendations: recommendations,
+    this.setState({recommendations: recommendations,
                    loading: false});
   }
 
   onSkipClick(name) {
     this.state.movies.splice(this.state.movies.findIndex(i => i.movie_id === name), 1);
-    this.setState({movies: this.state.movies,
-                   ratings: this.state.ratings, 
-                   recommendations: this.state.recommendations,
-                   loading: this.state.loading});
+    this.setState({movies: this.state.movies});
   }
 
-  onStarClick(nextValue, prevValue, name) {
+  onStarClick(nextValue, name) {
     this.state.ratings.push({movie_id: name, rating: nextValue})
     this.state.movies.splice(this.state.movies.findIndex(i => i.movie_id === name), 1);
     this.setState({movies: this.state.movies,
-                   ratings: this.state.ratings, 
-                   recommendations: this.state.recommendations,
-                   loading: this.state.loading});
+                   ratings: this.state.ratings});
     if(this.state.ratings.length === 5) {
       this.setState({movies: this.state.movies,
                      ratings: this.state.ratings, 
-                     recommendations: this.state.recommendations,
                      loading: true});
       fetch('/api/predict',
         {
@@ -89,13 +78,13 @@ export default class IndexPage extends React.Component {
     return (
       <div className="home">
         <div className="movies-selector">
-          <div className="category-header">ratings</div>
+          <div className="category-header">ratings:</div>
           <div className="movies-ratings">
             <Loadable
               active={this.state.loading}
               spinner={true}
               animate={true}
-              text='Generating recommendations...'>
+              text='Generating Recommendations...'>
               <TransitionGroup> 
                 {movies}
               </TransitionGroup>
@@ -103,7 +92,7 @@ export default class IndexPage extends React.Component {
           </div>
         </div>
         <div className="movies-selector">
-          <div className="category-header">recommendations</div>
+          <div className="category-header">recommendations:</div>
           {recommendations.slice(0,5).map(recoData => <MovieReco key={recoData.movie_id} {...recoData } />)}
         </div>
       </div>

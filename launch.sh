@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # install dependencies for api server
-cd moviematch/apiserver
+cd apiserver
 npm i
 
 # install dependencies for webserver

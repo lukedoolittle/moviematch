@@ -1,78 +1,78 @@
 #!/bin/bash
-# create the data directory to work from
-mkdir data
-chmod a+rwx /data
+echo 'downloading: java8 installer'
+sudo wget "https://s3.amazonaws.com/moviematch/jdk-8u141-linux-x64.rpm"
 
-# run the UCB setup script which installs Hadoop, Postgres, and Hive
-read -p 'Please enter the location of your attached volume [default is xvdb]: /dev/' locationvar
-locationvar=${locationvar:-xvdb}
-echo 'running: UCB complete setup script'
-wget https://s3.amazonaws.com/ucbdatasciencew205/setup_ucb_complete_plus_postgres.sh
-chmod +x ./setup_ucb_complete_plus_postgres.sh
-./setup_ucb_complete_plus_postgres.sh /dev/$locationvar
+echo 'installing: java8'
+sudo rpm -ivh jdk-8u141-linux-x64.rpm
 
-echo 'running: UCB spark setup script'
-wget https://s3.amazonaws.com/ucbdatasciencew205/setup_spark.sh
-bash ./setup_spark.sh
+echo 'downloading: spark installer'
+wget https://d3kbcqa49mib13.cloudfront.net/spark-2.2.0-bin-hadoop2.7.tgz
+ 
+echo 'installing: spark'
+sudo tar zxvf spark-2.2.0-bin-hadoop2.7.tgz -C /opt
+sudo ln -fs spark-2.2.0-bin-hadoop2.7 /opt/spark
 
-# add pyspark, spark-sql to path for w205 and root
-# and change the pyspark interpreter to use python 2.6
-echo 'configuration: adding environmental variables for spark'
-echo 'export SPARK=/data/spark15' >>/home/w205/.bash_profile
-echo 'export SPARK=/data/spark15' >>.bash_profile
-echo 'export SPARK_HOME=$SPARK' >>/home/w205/.bash_profile
-echo 'export SPARK_HOME=$SPARK' >>.bash_profile
-echo 'export PATH=$SPARK/bin:$PATH' >>/home/w205/.bash_profile
-echo 'export PATH=$SPARK/bin:$PATH' >>.bash_profile
-echo 'export PYSPARK_PYTHON=python2.6' >>/home/w205/.bash_profile
-echo 'export PYSPARK_PYTHON=python2.6' >>.bash_profile
+# add pyspark, spark-sql to path
+echo 'configuration: adding environmental variables'
+echo 'export SPARK_HOME=/opt/spark' >> .bash_profile
+echo 'PATH=$PATH:$SPARK_HOME/bin' >> .bash_profile
+echo 'export PATH' >> .bash_profile
+echo 'export JAVA_HOME=/usr/java/default' >> .bash_profile
+echo 'export PYSPARK_PYTHON=python2.7' >> .bash_profile
+export SPARK_HOME=/opt/spark
+PATH=$PATH:$SPARK_HOME/bin
+export PATH
+export JAVA_HOME=/usr/java/default
+export PYSPARK_PYTHON=python2.7
 
-# configure the current session as the profile above
-export SPARK=/data/spark15
-export SPARK_HOME=$SPARK
-export PATH=$SPARK/bin:$PATH
-export PYSPARK_PYTHON=python2.6
-
-echo 'configuration: reducing logging for spark'
-cp /data/spark15/conf/log4j.properties.template /data/spark15/conf/log4j.properties
-sed -i '2s/.*/log4j.rootCategory=ERROR, console/' /data/spark15/conf/log4j.properties
-
-echo 'configuration: expanding memory for spark'
-cp /data/spark15/conf/spark-defaults.conf.template /data/spark15/conf/spark-defaults.conf
-echo 'spark.driver.memory                7g' >> /data/spark15/conf/spark-defaults.conf
-echo 'spark.executor.memory              7g' >> /data/spark15/conf/spark-defaults.conf
-
-# clean up the setup scripts
-echo 'clean: removing UCB setup scripts'
-rm setup_ucb_complete_plus_postgres.sh
-rm setup_spark.sh
+echo 'configuration: spark'
+cp /opt/spark/conf/log4j.properties.template /opt/spark/conf/log4j.properties
+sed -i '19s/.*/log4j.rootCategory=ERROR, console/' /opt/spark/conf/log4j.properties
+cp /opt/spark/conf/spark-defaults.conf.template /opt/spark/conf/spark-defaults.conf
+echo 'spark.driver.memory                7g' >> /opt/spark/conf/spark-defaults.conf
+echo 'spark.executor.memory              7g' >> /opt/spark/conf/spark-defaults.conf
+echo 'spark.sql.warehouse.dir         /home/ec2-user' >> /opt/spark/conf/spark-defaults.conf
+echo 'spark.driver.extraJavaOptions -Dderby.system.home=/home/ec2-user' >> /opt/spark/conf/spark-defaults.conf
 
 echo 'installing: nodejs'
-yum install -y gcc-c++ make
-curl -sL https://rpm.nodesource.com/setup_8.x | bash -
-yum install -y nodejs
+sudo yum install -y gcc-c++ make
+curl -sL https://rpm.nodesource.com/setup_8.x | sudo -E bash -
+sudo yum install -y nodejs
 
 echo 'installing: mongodb'
-cat > /etc/yum.repos.d/mongodb-org-3.4.repo <<EOF
-[mongodb-org-3.4]
+echo "[mongodb-org-3.0]
 name=MongoDB Repository
-baseurl=https://repo.mongodb.org/yum/redhat/\$releasever/mongodb-org/3.4/x86_64/
-gpgcheck=1
-enabled=1
-gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
-EOF
-yum install -y mongodb-org
+baseurl=https://repo.mongodb.org/yum/amazon/2013.03/mongodb-org/3.0/x86_64/
+gpgcheck=0
+enabled=1" | sudo tee -a /etc/yum.repos.d/mongodb-org-3.0.repo
+sudo yum install -y mongodb-org
 
-# install mongodb python interface
-pip install pymongo
+# install necessary python packages
+sudo pip install pymongo
+sudo pip install numpy
 
 # forward HTTP traffic to port 8080
-iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8080
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8080
+echo 'iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8080' >> .bash_profile
 
 # start services needed for this session
-/data/start_metastore.sh
-service mongod start
+sudo chkconfig mongod on
+sudo service mongod start
+echo '* soft nofile 64000
+* hard nofile 64000
+* soft nproc 64000
+* hard nproc 64000' | sudo tee /etc/security/limits.d/90-mongodb.conf
 
 # need to increase the maximum number of open files for
 # larges instances
-ulimit -n 64000
+echo '*       soft  nofile  64000' | sudo tee -a /etc/security/limits.conf
+echo '*       hard  nofile  64000' | sudo tee -a /etc/security/limits.conf
+echo '*       hard  nproc  64000' | sudo tee -a /etc/security/limits.conf
+echo '*       hard  nproc  64000' | sudo tee -a /etc/security/limits.conf
+sudo ulimit -n 64000
+
+sudo yum install -y git
+
+echo 'cleanup'
+rm -f spark-2.2.0-bin-hadoop2.7.tgz
+rm -f jdk-8u141-linux-x64.rpm
