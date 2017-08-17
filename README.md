@@ -13,15 +13,25 @@ Download and run the setup script then reboot
       chmod +x setup.sh
       ./setup.sh
       sudo reboot
-	  
+
+### Run Website
+
 Clone this repository and move into the directory
 
       git clone https://github.com/lukedoolittle/moviematch.git
       cd moviematch
 
-Load the initial SMALL static set of data (optional)
+Load the initial SMALL static set of data
 
       ./data/small_data_load.sh
+
+Build and run webserver
+
+      ./launch.sh
+
+Get the Public DNS (IPv4) address from your EC2 instance and navigate to that uri in a browser
+
+### Load Additional Data
 
 Load the initial static set of data
 
@@ -30,7 +40,3 @@ Load the initial static set of data
 Load the secondary set of data
 
       ./data/additional_data_load.sh
-      
-Build and run webserver
-
-      ./launch.sh
